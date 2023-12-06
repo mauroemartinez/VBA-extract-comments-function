@@ -1,7 +1,7 @@
 # VBA-extract-comments-function
 Extract comments (threaded or not) with an added function to a cell by creating it using VBA script.
 # Steps:
-1) Copy the script from de .bas file.
+1) Copy the script from de .bas file from the second line on.
 2) Right click on the sheet name (for example, sheet1).
 3) Insert, Module.
 4) Paste the script.
