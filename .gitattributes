@@ -1,0 +1,3 @@
+# VBA imports need Windows line endings: keep .bas files byte for byte
+*.bas -text
+*.xlsm binary
