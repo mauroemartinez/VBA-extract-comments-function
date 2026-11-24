@@ -7,7 +7,7 @@
   <img src="https://raw.githubusercontent.com/mauroemartinez/VBA-extract-comments-function/main/Images/Extractor%20de%20Comentarios.PNG" alt="Function Preview" width=85%>
 </p>
 
-> **Note:** As seen in the image above, the function is versatile and supports both **threaded conversations** (Office 365) and **classic notes**, ensuring no data is left behind regardless of the Excel version used. What's moer, when there are no comments, it will leave the cell empty, no errors.
+> **Note:** As seen in the image above, the function is versatile and supports both **threaded conversations** (Office 365) and **classic notes**, ensuring no data is left behind regardless of the Excel version used. What's more, when there are no comments, it will leave the cell empty, no errors.
 
 ## 🚀 The Solution
 This script creates a new Excel function: `=ExtraerComentarios()`. 
@@ -35,6 +35,41 @@ Visual representation of the implementation within the VBA Editor:
 <p align="center">
   <img src="https://raw.githubusercontent.com/mauroemartinez/VBA-extract-comments-function/main/Images/Script%20extractor%20de%20comentarios.PNG" alt="VBA Script Preview" width=85%>
 </p>
+
+## 🗺️ Roadmap: one comment per row
+
+A reader suggested the next step, and it is a good one: a single text per cell is fine to read, but hard to search, sort or count. The plan is to also offer a **comments table**, one row per comment or reply, ready for a PivotTable:
+
+| Column | Example | Why |
+|---|---|---|
+| `Sheet` | `Ventas` | Filter by sheet |
+| `Column` | `D` | Index by column letter |
+| `Row` | `14` | Index by row number |
+| `Cell` | `D14` | Column and row combined, the key to join back to the data |
+| `Comment #` | `1`, `2`, `3` | `1` is the thread, the rest are replies in order |
+| `Type` | `Threaded` / `Note` | Modern comment or legacy note |
+| `Author` | `Ana` | Who wrote it |
+| `Timestamp` | `2026-11-24 10:32` | When (legacy notes have no date in Excel, so it stays empty) |
+| `Resolved` | `TRUE` / `FALSE` | Threaded comments can be marked resolved |
+| `Text` | `Check this price` | The comment itself |
+
+With that table, questions like *average comments per cell*, *last comment on a sheet*, *who comments the most* or *open threads by sheet* become one PivotTable or one formula.
+
+**How it could be built (two options, both planned):**
+1. **A macro** (`ExportarComentarios`) that scans every sheet (`CommentsThreaded` and `Comments`) and writes the rows into a new sheet as an Excel Table. Works in any version.
+2. **A spilling function** (`=TablaComentarios(range)`) that returns the same table as a dynamic array. Needs Excel 365.
+
+**Known limits to handle:**
+- Excel does not recalculate a formula when a comment changes: the function would need `Application.Volatile` or a manual recalculation (F9); the macro simply runs again.
+- Legacy notes carry no timestamp, and their author is only a display name.
+- Large workbooks: write all rows in one array, not cell by cell, so it stays fast.
+
+**Other ideas:**
+- English function names as aliases (`ExtractComments`, `CommentsTable`) next to the Spanish ones.
+- A sample `.xlsm` with test comments, so people can try it without copying code.
+- An optional format for the current single-cell function (for example `{author} ({date}): {text}`).
+
+Suggestions are welcome as issues.
 
 ---
 **Note:** Remember to save your Excel file as **Excel Macro-Enabled Workbook (.xlsm)** to keep the function working.
